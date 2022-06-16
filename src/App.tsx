@@ -1,6 +1,4 @@
-import React from "react";
-
-import { Solution } from "./solution";
+import Solution from './solution/Labyrinth';
 
 function App() {
   return <Solution />;

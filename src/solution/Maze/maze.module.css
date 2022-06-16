@@ -1,0 +1,47 @@
+@keyframes scaleIn {
+  from {
+    transform: scale(0.2, 0.2);
+  }
+  to {
+    transform: scale(0.6, 0.6);
+  }
+}
+
+.labyrinth {
+  display: grid;
+  grid-gap: 1px;
+  background-color: #000;
+  border: 1px solid #000;
+  width: max-content;
+}
+
+.circle {
+  border-radius: 50%;
+  box-shadow: 0 0 10px #000;
+  background: #fff;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  animation: scaleIn 700ms infinite linear;
+  transition: top 700ms ease, left 700ms ease;
+  z-index: 3;
+}
+
+.footerText {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.movesLeftText {
+  text-align: right;
+  flex: 1 1 auto;
+}
+
+.youWonText {
+  color: rgb(33, 137, 33);
+}
+
+.youLostText {
+  color: rgb(255, 0, 0);
+}

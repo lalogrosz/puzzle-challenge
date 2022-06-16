@@ -1,0 +1,27 @@
+.main {
+  margin-top: 20px;
+  border-top: 2px solid #ccc;
+}
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.row {
+  display: flex;
+}
+
+.row div {
+  flex: 1 1 auto;
+  width: 100%;
+  padding: 3px;
+}
+
+.row div.points {
+  width: 60px;
+  text-align: center;
+}
+
+.header {
+  border-bottom: 1px solid #000;
+}

@@ -1,0 +1,26 @@
+.main {
+  display: flex;
+  margin-top: 20px;
+}
+
+.main input {
+  flex: 1 1 auto;
+  border: 1px solid #ccc;
+  height: 25px;
+  border-radius: 0.4rem;
+  margin-right: 10px;
+  padding: 4px 10px;
+}
+
+.main button {
+  border: 1px solid #ccc;
+  border-radius: 0.4rem;
+  background-color: rgb(33, 137, 33);
+  color: #fff;
+  cursor: pointer;
+}
+
+.main button:disabled {
+  background-color: #ccc;
+  color: #000;
+}
