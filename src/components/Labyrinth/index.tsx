@@ -1,11 +1,12 @@
-import styles from './labyrinth.module.css';
-import React from 'react';
+import React, { ReactElement } from 'react';
+
 import { useAppSelector } from '../../store/hooks';
-import PlayerInput from '../PlayerInput';
 import HighScore from '../HighScore';
 import Maze from '../Maze';
+import PlayerInput from '../PlayerInput';
+import styles from './labyrinth.module.css';
 
-const Labyrinth = () => {
+const Labyrinth = (): ReactElement => {
   const state = useAppSelector(state => state);
   const started = state.started;
 

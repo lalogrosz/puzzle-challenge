@@ -6,7 +6,10 @@
   max-width: 500px;
   margin: 0 auto;
 }
-
+h1 {
+  text-align: center;
+  font-size: 2rem;
+}
 .row {
   display: flex;
 }
@@ -23,5 +26,6 @@
 }
 
 .header {
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #ccc;
+  font-weight: bold;
 }

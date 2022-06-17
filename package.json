@@ -48,5 +48,10 @@
   "devDependencies": {
     "@emotion/babel-preset-css-prop": "^10.0.27",
     "@types/lodash.debounce": "^4.0.7"
+  },
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/.jest/setEnvVars.js"
+    ]
   }
 }

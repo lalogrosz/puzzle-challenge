@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { buildMaze, DirectionType, move, SquareModel } from '../solution/Labyrinth/service';
+import { buildMaze, DirectionType, move, SquareModel } from '../services';
 
 export type HighScore = {
   name: string;

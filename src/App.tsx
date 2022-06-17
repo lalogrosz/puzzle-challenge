@@ -1,4 +1,4 @@
-import Solution from './solution/Labyrinth';
+import Solution from './components/Labyrinth';
 
 function App() {
   return <Solution />;

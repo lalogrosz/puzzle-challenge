@@ -1,10 +1,11 @@
+import debounce from 'lodash.debounce';
+import { ReactElement, useCallback, useState } from 'react';
+
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { actions } from '../../store/slice';
-import debounce from 'lodash.debounce';
-import { useCallback, useState } from 'react';
 import styles from './player-input.module.css';
 
-const PlayerInput = () => {
+const PlayerInput = (): ReactElement => {
   const dispatch = useAppDispatch();
   const started = useAppSelector(state => state.started);
 

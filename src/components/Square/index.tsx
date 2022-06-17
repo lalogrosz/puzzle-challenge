@@ -1,5 +1,6 @@
-import React from 'react';
 import classNames from 'classnames';
+import React from 'react';
+
 import styles from './square.module.css';
 
 interface Props {
@@ -14,7 +15,7 @@ interface Props {
   isWall: boolean;
 }
 
-const Square = ({ fog, isStart, isWall, isFinish }: Props) => {
+const Square = ({ fog, isStart, isWall, isFinish }: Props): React.ReactElement => {
   return (
     <div
       className={classNames(styles.square, {

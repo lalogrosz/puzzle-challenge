@@ -1,4 +1,4 @@
-import { RootState } from '../../store/hooks';
+import { RootState } from '../store/hooks';
 
 export enum Directions {
   top = 'top',
@@ -21,7 +21,6 @@ export interface SquareModel {
   isFinish: boolean;
   isWall: boolean;
   position: number;
-  coords: [number, number];
 }
 
 export interface Maze {
@@ -40,7 +39,7 @@ const mazePath = (process.env.REACT_APP_LABYRINTH_PATH || '0,1;1,0;2,0;3,0;4,0;4
 const moves = process.env.REACT_APP_TOTAL_MOVES ? parseInt(process.env.REACT_APP_TOTAL_MOVES, 10) : 20;
 
 const OPPOSITE_DIRECTION = {
-  top: Directions.top,
+  top: Directions.bottom,
   right: Directions.left,
   bottom: Directions.top,
   left: Directions.right
@@ -66,16 +65,19 @@ export const buildMaze = (): Maze => {
   let i = 0;
 
   const maze: Maze = {
-    squares: [],
+    squares: [], // squares are not a multi-dimensional array. It is a flat array and it is easier to iterate.
     movesLeft: moves
   };
 
+  // Creates the maze squares and sets the neighbors
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
+      // Decides if the square is a wall, start or finish
       isStart = x === 0 && y === 0;
       isFinish = x === size - 1 && y === size - 1;
       isWall = !mazePath.some(path => path[0] === x && path[1] === y) && !isStart && !isFinish;
 
+      // Set the neighbors. Top and bottom are calculated by adding or subtracting the square size
       neighbors = {
         top: y - 1 >= 0 ? i - size : undefined,
         right: x + 1 < size ? i + 1 : undefined,
@@ -83,6 +85,7 @@ export const buildMaze = (): Maze => {
         left: x - 1 >= 0 ? i - 1 : undefined
       };
 
+      // Each square has a fog to hide the maze. The fog is set to true by default
       maze.squares.push({
         fog: {
           top: true,
@@ -94,38 +97,45 @@ export const buildMaze = (): Maze => {
         isStart,
         isFinish,
         isWall,
-        position: i,
-        coords: [x, y]
+        position: i
       });
       i++;
     }
   }
+  // By default the fog is set to false for the start neighbors squares
   maze.current = maze.squares[0];
   openNeighborsFog(maze.squares, maze.current.neighbors);
+
   return maze;
 };
 
 const openNeighborsFog = (squares: SquareModel[], neighbors: Neighbors) => {
+  // Loop over the neighbors and set the fog to false
   (Object.keys(neighbors) as [Directions]).forEach(key => {
     if (neighbors[key]) {
+      // OPPOSITE_DIRECTION is used to know what direction the square is facing
       squares[neighbors[key]].fog[OPPOSITE_DIRECTION[key]] = false;
     }
   });
 };
 
 const moveCircle = (state: RootState, direction: DirectionType) => {
+  // Use the CIRCLE_MOVE_MAP to move the circle
   const [x, y] = CIRCLE_MOVE_MAP[direction];
   state.circlePosition = [state.circlePosition[0] + x, state.circlePosition[1] + y];
 };
 
 const isValidKey = (key: string) => {
+  // Only allow the arrow keys
   return Object.keys(DIRECTION_MAP).includes(key);
 };
 
 const canWalk = (state: RootState) => state.movesLeft > 0 && !state.won && !state.lost;
 
+// This function check if the next square is one of the neighbors of the current square
 const isNeighbor = (square: SquareModel, position: number) => (Object.keys(square.neighbors) as [Directions]).some(k => square.neighbors[k] === position);
 
+// Push one high-score and sort the array by score
 const addHighScore = (state: RootState) => {
   const highScore = state.highScore;
   const newScore = { name: state.player, score: state.movesLeft };
@@ -133,6 +143,7 @@ const addHighScore = (state: RootState) => {
   state.highScore = highScore.sort((a, b) => b.score - a.score);
 };
 
+// This is the main function that handles the movement of the circle
 export const move = (state: RootState, direction: DirectionType): boolean => {
   if (!isValidKey(direction)) {
     return;

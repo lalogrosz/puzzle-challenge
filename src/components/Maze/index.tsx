@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { actions } from '../../store/slice';
-import { DirectionType, size, squareSize } from '../Labyrinth/service';
+import { DirectionType, size, squareSize } from '../../services';
 import Square from '../Square';
 import styles from './maze.module.css';
 
-const Maze = () => {
+const Maze = (): ReactElement => {
   const state = useAppSelector(state => state);
   const started = state.started;
   const circlePosition = state.circlePosition;
@@ -22,7 +22,7 @@ const Maze = () => {
 
   const dispatch = useAppDispatch();
 
-  const downHandler = useCallback(
+  const keyDownHandler = useCallback(
     (ev: KeyboardEvent) => {
       started && dispatch(actions.move(ev.key as DirectionType));
     },
@@ -30,7 +30,7 @@ const Maze = () => {
   );
 
   useEffect(() => {
-    window.addEventListener('keydown', downHandler);
+    window.addEventListener('keydown', keyDownHandler);
 
     setLabyrinthStyle({
       gridTemplateRows: `repeat(${size}, ${squareSize}px)`,
@@ -38,9 +38,9 @@ const Maze = () => {
     });
 
     return () => {
-      window.removeEventListener('keydown', downHandler);
+      window.removeEventListener('keydown', keyDownHandler);
     };
-  }, [downHandler]);
+  }, [keyDownHandler]);
 
   useEffect(() => {
     setCirclePositionStyle({
