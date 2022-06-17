@@ -44,8 +44,8 @@ const Maze = (): ReactElement => {
 
   useEffect(() => {
     setCirclePositionStyle({
-      top: `${circlePosition[0]}px`,
-      left: `${circlePosition[1]}px`
+      top: `${circlePosition[1]}px`,
+      left: `${circlePosition[0]}px`
     });
   }, [circlePosition]);
 

@@ -1,3 +1,5 @@
 process.env.REACT_APP_LABYRINTH_SIZE = 3;
 process.env.REACT_APP_TOTAL_MOVES = 6;
 process.env.REACT_APP_LABYRINTH_PATH = '0,1;0,2;1,2;2,2;1,0;2,0';
+process.env.REACT_APP_INITIAL_POSITION = 0;
+process.env.REACT_APP_FINISH_POSITION = 8;

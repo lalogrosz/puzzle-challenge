@@ -20,7 +20,6 @@ export type InitialState = {
 
 const initialState = (): InitialState => ({
   ...buildMaze(),
-  circlePosition: [0, 0],
   won: false,
   lost: false,
   highScore: []

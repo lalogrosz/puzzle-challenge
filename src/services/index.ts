@@ -27,16 +27,19 @@ export interface Maze {
   squares: SquareModel[];
   current?: SquareModel;
   movesLeft: number;
+  circlePosition: [number, number];
 }
 
 export type DirectionType = keyof typeof DIRECTION_MAP;
 
 export const squareSize = process.env.REACT_APP_SQUARE_SIZE ? parseInt(process.env.REACT_APP_SQUARE_SIZE, 10) : 50;
 export const size = process.env.REACT_APP_LABYRINTH_SIZE ? parseInt(process.env.REACT_APP_LABYRINTH_SIZE, 10) : 5;
-const mazePath = (process.env.REACT_APP_LABYRINTH_PATH || '0,1;1,0;2,0;3,0;4,0;4,1;4,2;4,3')
+const mazePath = (process.env.REACT_APP_LABYRINTH_PATH || '0,1;1,0;2,0;3,0;4,0;4,1;4,2;4,3;1,1')
   .split(';')
   .map(item => item.split(',').map(item => parseInt(item, 10)));
-const moves = process.env.REACT_APP_TOTAL_MOVES ? parseInt(process.env.REACT_APP_TOTAL_MOVES, 10) : 20;
+const moves = process.env.REACT_APP_TOTAL_MOVES ? parseInt(process.env.REACT_APP_TOTAL_MOVES, 10) : 10;
+const initialPosition = process.env.REACT_APP_INITIAL_POSITION ? parseInt(process.env.REACT_APP_INITIAL_POSITION, 10) : 4;
+const finishPosition = process.env.REACT_APP_FINISH_POSITION ? parseInt(process.env.REACT_APP_FINISH_POSITION, 10) : 24;
 
 const OPPOSITE_DIRECTION = {
   top: Directions.bottom,
@@ -53,29 +56,35 @@ const DIRECTION_MAP = {
 };
 
 const CIRCLE_MOVE_MAP = {
-  ArrowUp: [-squareSize - 1, 0],
-  ArrowDown: [squareSize + 1, 0],
-  ArrowLeft: [0, -squareSize - 1],
-  ArrowRight: [0, squareSize + 1]
+  ArrowUp: [0, -squareSize - 1],
+  ArrowDown: [0, squareSize + 1],
+  ArrowLeft: [-squareSize - 1, 0],
+  ArrowRight: [squareSize + 1, 0]
 };
 
 export const buildMaze = (): Maze => {
   let isStart, isFinish, isWall: boolean;
   let neighbors: Neighbors;
   let i = 0;
+  let circlePosition: [number, number] = [0, 0];
 
   const maze: Maze = {
     squares: [], // squares are not a multi-dimensional array. It is a flat array and it is easier to iterate.
-    movesLeft: moves
+    movesLeft: moves,
+    circlePosition
   };
 
   // Creates the maze squares and sets the neighbors
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       // Decides if the square is a wall, start or finish
-      isStart = x === 0 && y === 0;
-      isFinish = x === size - 1 && y === size - 1;
+      isStart = i === initialPosition;
+      isFinish = i === finishPosition;
       isWall = !mazePath.some(path => path[0] === x && path[1] === y) && !isStart && !isFinish;
+
+      if (isStart) {
+        circlePosition = [x * (squareSize + 1), y * (squareSize + 1)];
+      }
 
       // Set the neighbors. Top and bottom are calculated by adding or subtracting the square size
       neighbors = {
@@ -103,7 +112,8 @@ export const buildMaze = (): Maze => {
     }
   }
   // By default the fog is set to false for the start neighbors squares
-  maze.current = maze.squares[0];
+  maze.current = maze.squares[initialPosition];
+  maze.circlePosition = circlePosition;
   openNeighborsFog(maze.squares, maze.current.neighbors);
 
   return maze;
@@ -112,7 +122,7 @@ export const buildMaze = (): Maze => {
 const openNeighborsFog = (squares: SquareModel[], neighbors: Neighbors) => {
   // Loop over the neighbors and set the fog to false
   (Object.keys(neighbors) as [Directions]).forEach(key => {
-    if (neighbors[key]) {
+    if (neighbors[key] !== undefined) {
       // OPPOSITE_DIRECTION is used to know what direction the square is facing
       squares[neighbors[key]].fog[OPPOSITE_DIRECTION[key]] = false;
     }
